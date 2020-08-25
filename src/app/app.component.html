@@ -1,0 +1,45 @@
+<!-- <div class="row">
+  <div class="col-sm-10 col-md-8">
+    <form [formGroup]="userProfileForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-sm-10 col-md-8">
+          <div class="form-group" *ngFor="let item of dynamicJSON">
+            <label>{{item.label}}</label>
+            <input class="form-control" type="{{item.type}}">
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-lg btn-success">Submit</button>
+    </form>
+  </div>
+</div> -->
+<form [formGroup]="userProfileForm" (ngSubmit)="onSubmit()">
+  <div *ngFor="let form_elem of dynamicJSON">
+  <div [ngSwitch]="form_elem.type">
+    <div *ngSwitchCase="'select'">
+      <label>{{form_elem.label}}</label>
+      <br>
+      <select formControlName="{{form_elem.label}}">
+        <option *ngFor="let opt of form_elem.options">
+          {{opt}}
+        </option>
+      </select>
+    </div>
+    <div *ngSwitchDefault>
+      <label>{{form_elem.label}}</label>
+      <br>
+      <input type={{form_elem.type}} formControlName="{{ form_elem.label }}"/>
+      <ng-container *ngFor="let val of form_elem.validations">
+        <span *ngIf="userProfileForm.controls[form_elem.label].touched && 
+        userProfileForm.controls[form_elem.label].errors">
+          <p *ngIf="userProfileForm.controls[form_elem.label].errors[val.name]">
+            {{val.message}}
+          </p>
+        </span>
+      </ng-container>
+    </div>
+  </div>  
+  </div>
+  <button class="btn btn-primary">Submit</button>
+</form>
+
